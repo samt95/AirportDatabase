@@ -1,0 +1,9 @@
+
+apache-tomcat-6.0.18/logs/*
+apache-tomcat-6.0.18/work/*
+apache-tomcat-6.0.18/work/Catalina/localhost/*
+apache-tomcat-6.0.18/work/Catalina/localhost/docs/*
+apache-tomcat-6.0.18/work/Catalina/localhost/examples/*
+apache-tomcat-6.0.18/work/Catalina/localhost/host-manager/*
+apache-tomcat-6.0.18/work/Catalina/localhost/manager/*
+development/ConnectionManager.java
