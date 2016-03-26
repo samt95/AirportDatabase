@@ -3,7 +3,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class InsertOutgoing extends HttpServlet {
+public class InsertArrivals extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -11,16 +11,19 @@ public class InsertOutgoing extends HttpServlet {
         
         String acode = request.getParameter("acode");
         String rnum = request.getParameter("Rnum");
-        String destination = request.getParameter("destination");
-        String leaveTime = request.getParameter("outT");
         
 
-
+        String arrID = request.getParameter("arrID");
+        String gate = request.getParameter("gate");
+        String arrT = request.getParameter("arrT");
+        
+     
 
         String statementString = 
-        "INSERT INTO OutgoingRoutes(destination, outT, rnum, acode) " +
-        "VALUES( '" + destination + "', TO_DATE('" + leaveTime + "', 'dd/mm/yyyy hh24:mi:ss'), '" + rnum +"', '"+ acode+"')";        
-      
+        "INSERT INTO Arrivals(arrId, gate, arrT,rnum, acode) " +
+        "VALUES( '" + arrID + "', '" + gate + "',  TO_DATE('" + arrT + "', 'dd/mm/yyyy hh24:mi:ss')," + " '"+ rnum + "', '" + acode + "')";        
+
+      //'" + depId + "',
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
             Statement stmt = conn.createStatement();

@@ -3,7 +3,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class InsertOutgoing extends HttpServlet {
+public class DeleteRoute extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -11,22 +11,20 @@ public class InsertOutgoing extends HttpServlet {
         
         String acode = request.getParameter("acode");
         String rnum = request.getParameter("Rnum");
-        String destination = request.getParameter("destination");
-        String leaveTime = request.getParameter("outT");
         
-
-
+     
 
         String statementString = 
-        "INSERT INTO OutgoingRoutes(destination, outT, rnum, acode) " +
-        "VALUES( '" + destination + "', TO_DATE('" + leaveTime + "', 'dd/mm/yyyy hh24:mi:ss'), '" + rnum +"', '"+ acode+"')";        
-      
+        "DELETE FROM ROUTES" +
+        " WHERE acode='" + acode +"' AND rnum='" + rnum +"' ";
+
+
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(statementString);
             stmt.close();
-            out.println("Insertion Successful!");
+            out.println("Successfullly deleted route( "+ acode + ", " + rnum + ")");
         }
         catch(SQLException e) { out.println(e); }
         ConnectionManager.getInstance().returnConnection(conn);
