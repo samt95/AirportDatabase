@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Insert into Incoming Routes</title>
+    </head>
+            <center>Insert a Route into the database<br>
+
+    <body><font size="4">
+            <form method="GET" action="http://localhost:8081/servlet/InsertIncoming" >
+                Source: <input type="text" name="source" value="" /> <br>
+                Incoming Time: <input type="text" name="incT" value="" /> <br>
+                Route Number: <input type="text" name="Rnum" value="" /> <br>
+               
+                Airport Code: <input type="text" name="acode" value="" /> <br>
+                
+                <input type="submit" value="Start" >    <br>
+            </form>
+        </center>
+        <hr>
+    </body>
+</html> 
+
+CREATE TABLE IncomingRoutes (
+  source VARCHAR(20),
+  incT DATE,
+  rnum int,
+  acode int,
+  FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode),
+  PRIMARY KEY (rnum, acode)
+);

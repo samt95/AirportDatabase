@@ -3,7 +3,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class InsertOutgoing extends HttpServlet {
+public class InsertIncoming extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -11,16 +11,14 @@ public class InsertOutgoing extends HttpServlet {
         
         String acode = request.getParameter("acode");
         String rnum = request.getParameter("Rnum");
-        String destination = request.getParameter("destination");
-        String leaveTime = request.getParameter("outT");
+        String source = request.getParameter("source");
+        String incT = request.getParameter("incT");
         
-        leaveTime = "22/11/1155 01:33:33";
-
-
+     
 
         String statementString = 
-        "INSERT INTO OutgoingRoutes(destination, outT, rnum, acode) " +
-        "VALUES( '" + destination + "', '" + leaveTime + "', '" + rnum +"', '"+ acode+"')";        
+        "INSERT INTO IncomingRoutes(source, incT, rnum, acode) " +
+        "VALUES( '" + source + "', '" + incT + "', '" + rnum +"', '"+ acode+"')";        
       
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
