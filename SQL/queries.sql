@@ -1,7 +1,38 @@
 5.
 
+a)
+
+-- ACTUAL QUERY
+-- 'airlineName' is replaced by the name entered in the form
+SELECT *
+FROM Routes
+WHERE acode = (
+  SELECT acode
+  FROM Airlines
+  WHERE name='airlineName'
+  );
+
+
+-- query in java string used in form
+ResultSet rset = stmt.executeQuery(
+                "SELECT * " +
+                "FROM Routes " +
+                "WHERE acode = ( " +
+                    "SELECT acode " +
+                    "FROM Airlines " +
+                    "WHERE name='" + airline + "'" +
+                    " )"
+                );
+
+
+---------------------------------------------------------------------------------------
+
 b)
 
+
+-- ACTUAL QUERY
+
+-- initially used this to perfrom a single query
 SELECT * 
 FROM Routes
 WHERE rnum IN (
@@ -16,8 +47,39 @@ WHERE rnum IN (
   );
 
 
+-- used this following queries in the form instead to split up departures and arrivals in different tables
+-- 'location' is replaced by string entered in form
+-- for departures
+SELECT acode, rnum, TO_CHAR(outT, 'hh24:mi') AS outTime
+FROM OutgoingRoutes 
+WHERE destination='location';
+
+-- for arrivals
+SELECT acode, rnum, TO_CHAR(incT, 'hh24:mi') AS incomingTime
+FROM IncomingRoutes
+WHERE source='location';
+
+
+
+-- query in java string used in form
+
+ResultSet rset = stmt.executeQuery(
+                      "SELECT acode, rnum, TO_CHAR(outT, 'hh24:mi') AS outTime "
+                    + "FROM OutgoingRoutes "
+                    + "  WHERE destination='" + location + "'"
+                );
+
+rset = stmt.executeQuery(
+                    "SELECT acode, rnum, TO_CHAR(incT, 'hh24:mi') AS incomingTime "
+                  + "FROM IncomingRoutes "
+                  + "  WHERE source='" + location + "'"
+              );
+
+---------------------------------------------------------------------------------------
 
 c)
+
+-- ACTUAL QUERIES
 
 -- for departures
 SELECT *
@@ -31,6 +93,71 @@ WHERE 24*ABS(arrT-to_date('01/01/2016 12:00', 'dd/mm/yyyy hh24:mi') ) <= 1;
 
 
 
+-- JAVA STRING QUERIES
+
+ResultSet rset = stmt.executeQuery(
+                          "SELECT * "
+                        + "FROM Departures "
+                        + "WHERE 24*ABS(depT-to_date('" + dateTime + "', 'dd/mm/yyyy hh24:mi') ) <= 1"
+                );
+
+
+rset = stmt.executeQuery(
+                              "SELECT acode, rnum, TO_CHAR(incT, 'hh24:mi') AS incomingTime "
+                            + "FROM IncomingRoutes "
+                            + "  WHERE source='" + location + "'"
+                        );
+
+
+
+---------------------------------------------------------------------------------------
+d)
+
+
+-- for departures where depID is an interger entered in the form
+ResultSet rset = stmt.executeQuery(
+                  "SELECT * "
+                + "FROM Passengers "
+                + "WHERE depID=" + Integer.valueOf(depID)
+                );
+
+-- for arrivals where arrID is an interger intered in the form
+ResultSet rset = stmt.executeQuery(
+                  "SELECT * "
+                + "FROM Passengers "
+                + "WHERE arrID=" + Integer.valueOf(arrID)
+                );
+
+---------------------------------------------------------------------------------------
+e)
+
+-- passengerID is entered in the form
+ResultSet rset = stmt.executeQuery(
+                        "SELECT * "
+                        + "FROM Baggage "
+                        + "WHERE pID = ( "
+                        + "  SELECT pID "
+                        + "  FROM Passengers "
+                        + "  WHERE pid=" + passengerID
+                        + "  )"
+                        );
+
+
+---------------------------------------------------------------------------------------
+f)
+
+SELECT gate FROM Gates WHERE isFree=1;
+
+---------------------------------------------------------------------------------------
+g)
+
+-- where '1' is replaced by the gate entered in the form
+UPDATE Gates
+SET isFree=1
+WHERE gate='1';
+
+
+---------------------------------------------------------------------------------------
 6.
 
 a)
@@ -38,7 +165,7 @@ SELECT I.rnum AS inRoute, O.rnum AS outRoute
 FROM IncomingRoutes I, OutgoingRoutes O
 WHERE ((I.incT+(1/24)) <= O.outT AND
       O.outT <= (I.incT+(12/24)));
-
+---------------------------------------------------------------------------------------
 
 b)
 
@@ -49,6 +176,8 @@ FROM Passengers LEFT OUTER JOIN Departures LEFT OUTER JOIN Arrivals
 WHERE (arrT > currentTime AND currentTime > arrt-flightTime) OR
       (depT < currentTime AND currentTime < depT+flightTime);
 
+
+---------------------------------------------------------------------------------------
 c)
 
 SELECT pID, name, COUNT(pI)
@@ -56,18 +185,11 @@ FROM Passengers
 WHERE
 GROUP BY ()
 
-
+---------------------------------------------------------------------------------------
 d)
 
-
---not working.
-
-SELECT destination, rnum, acode, COUNT(depID) AS depDelayCount
+SELECT destination, acode, COUNT(depID) AS depDelayCount
 FROM Departures NATURAL JOIN OutgoingRoutes
 WHERE to_date(to_char(depT,'hh24:mi'),'hh24:mi') - to_date(to_char(outT,'hh24:mi'),'hh24:mi') > 0
 GROUP BY destination, acode
 ORDER BY depDelayCount DESC;
-
-
-
-
