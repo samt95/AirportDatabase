@@ -18,7 +18,7 @@ public class InsertIncoming extends HttpServlet {
 
         String statementString = 
         "INSERT INTO IncomingRoutes(source, incT, rnum, acode) " +
-        "VALUES( '" + source + "', TO_DATE('" + incT + "', 'dd/mm/yyyy hh24:mi:ss'), '" + rnum +"', '"+ acode+"')";        
+        "VALUES( '" + source + "', TO_DATE('" + incT + "', 'hh24:mi'), '" + rnum +"', '"+ acode+"')";        
       
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {

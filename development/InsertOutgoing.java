@@ -19,7 +19,7 @@ public class InsertOutgoing extends HttpServlet {
 
         String statementString = 
         "INSERT INTO OutgoingRoutes(destination, outT, rnum, acode) " +
-        "VALUES( '" + destination + "', TO_DATE('" + leaveTime + "', 'dd/mm/yyyy hh24:mi:ss'), '" + rnum +"', '"+ acode+"')";        
+        "VALUES( '" + destination + "', TO_DATE('" + leaveTime + "', 'hh24:mi'), '" + rnum +"', '"+ acode+"')";        
       
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
