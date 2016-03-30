@@ -169,21 +169,18 @@ WHERE ((I.incT+(1/24)) <= O.outT AND
 
 b)
 
--- need flight time??????????????
--- or need status
-SELECT pID, name
-FROM Passengers LEFT OUTER JOIN Departures LEFT OUTER JOIN Arrivals
-WHERE (arrT > currentTime AND currentTime > arrt-flightTime) OR
-      (depT < currentTime AND currentTime < depT+flightTime);
+-- need to test
+SELECT *
+FROM Passengers
+WHERE depID IS NOT NULL AND arrID IS NOT NULL;
 
 
 ---------------------------------------------------------------------------------------
 c)
-
-SELECT pID, name, COUNT(pI)
+-- this does not account for passengers who have both a departure and an arrival
+SELECT name, gov_issued_id, NVL(COUNT(pID), 0)
 FROM Passengers
-WHERE
-GROUP BY ()
+GROUP BY gov_issued_id, name;
 
 ---------------------------------------------------------------------------------------
 d)
