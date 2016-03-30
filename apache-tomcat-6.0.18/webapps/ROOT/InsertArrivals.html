@@ -20,11 +20,3 @@
     </body>
 </html> 
 
-CREATE TABLE Arrivals (
-  arrID int PRIMARY KEY,
-  gate VARCHAR(10),
-  arrT DATE,
-  rnum int,
-  acode int,
-  FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode)
-);
