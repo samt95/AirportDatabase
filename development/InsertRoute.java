@@ -13,9 +13,7 @@ public class InsertRoute extends HttpServlet {
         String rnum = request.getParameter("Rnum");
         String planemodel = request.getParameter("planemodel");
         
-        //acode = "6";
-        //rnum = "555";
-        //planemodel = "555";
+        
 
         String statementString = 
         "INSERT INTO Routes(acode, rnum, planemodel) " +
