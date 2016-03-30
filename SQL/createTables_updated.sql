@@ -1,3 +1,5 @@
+
+-- DROP TABLES
 drop table baggage;
 drop table passengers;
 drop table departures;
@@ -6,6 +8,7 @@ drop table incomingroutes;
 drop table outgoingroutes;
 drop table routes;
 drop table airlines;
+
 
 
 -- TABLE CREATION
@@ -17,46 +20,38 @@ CREATE TABLE Airlines (
 );
 
 CREATE TABLE Routes (
-  rnum int,
+  rnum int PRIMARY KEY,
   planemodel VARCHAR(40),
-  acode int REFERENCES Airlines(acode) ON DELETE CASCADE,
-  PRIMARY KEY (acode, rnum) 
+  acode int REFERENCES Airlines(acode) ON DELETE CASCADE
 );
 
 CREATE TABLE OutgoingRoutes (
   destination VARCHAR(20),
   outT DATE,
-  rnum int,
-  acode int,
-  FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode) ON DELETE CASCADE,
-  PRIMARY KEY (rnum, acode) 
+  rnum int REFERENCES Routes(rnum) ON DELETE CASCADE,
+  PRIMARY KEY (rnum)
 );
 
 CREATE TABLE IncomingRoutes (
   source VARCHAR(20),
   incT DATE,
-  rnum int,
+  rnum int REFERENCES Routes(rnum) ON DELETE CASCADE,
   acode int,
-  FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode) ON DELETE CASCADE,
-  PRIMARY KEY (rnum, acode)
+  PRIMARY KEY (rnum)
 );
 
 CREATE TABLE Departures (
   depID int PRIMARY KEY,
   gate VARCHAR(10),
   depT DATE,
-  rnum int,
-  acode int,
-  FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode) ON DELETE CASCADE
+  rnum int REFERENCES Routes(rnum) ON DELETE CASCADE
 );
 
 CREATE TABLE Arrivals (
   arrID int PRIMARY KEY ,
   gate VARCHAR(10),
   arrT DATE,
-  rnum int,
-  acode int,
-  FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode)ON DELETE CASCADE
+  rnum int REFERENCES Routes(rnum) ON DELETE CASCADE
 );
 
 CREATE TABLE Passengers (

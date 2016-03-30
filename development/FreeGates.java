@@ -3,30 +3,33 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class InsertOutgoing extends HttpServlet {
+public class FreeGates extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
-        String acode = request.getParameter("acode");
-        String rnum = request.getParameter("Rnum");
-        String destination = request.getParameter("destination");
-        String leaveTime = request.getParameter("outT");
-        
+        PrintWriter out = response.getWriter();  
 
-
-
-        String statementString = 
-        "INSERT INTO OutgoingRoutes(destination, outT, rnum, acode) " +
-        "VALUES( '" + destination + "', TO_DATE('" + leaveTime + "', 'hh24:mi'), '" + rnum +"', '"+ acode+"')";        
-      
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(statementString);
-            stmt.close();
-            out.println("Insertion Successful!");
+          Statement stmt = conn.createStatement();
+          ResultSet rset = stmt.executeQuery("SELECT gate FROM Gates WHERE isFree=1");
+      
+      out.println("<h2>Free Gates</h2>");
+          out.println("<table>");
+
+        out.println(
+              "<tr>" +
+                  "<td>gate</td>" + 
+              "</tr>");
+
+          while (rset.next()) {
+              out.println(
+              "<tr>" +
+                  "<td>" + rset.getString("gate") + "</td>" + 
+              "</tr>");
+          }
+          out.println("</table>");
+          stmt.close();
         }
         catch(SQLException e) { out.println(e); }
         ConnectionManager.getInstance().returnConnection(conn);

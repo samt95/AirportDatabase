@@ -3,43 +3,46 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class AirlineRoutes extends HttpServlet {
+public class PassengersFromArrival extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response)
     										throws ServletException, IOException {
       response.setContentType("text/html;charset=UTF-8");
       PrintWriter out = response.getWriter();
-      String airline = request.getParameter("airline");
+      String arrID = request.getParameter("arrID");
         
 	  Connection conn = ConnectionManager.getInstance().getConnection();
       try { 
     	  Statement stmt = conn.createStatement();
     	  ResultSet rset = stmt.executeQuery(
-                        "SELECT * " +
-                        "FROM Routes " +
-                        "WHERE acode = ( " +
-                            "SELECT acode " +
-                            "FROM Airlines " +
-                            "WHERE name='" + airline + "'" +
-                            " )"
+                          "SELECT * "
+                        + "FROM Passengers "
+                        + "WHERE arrID=" + Integer.valueOf(arrID)
                         );
       
-
-        out.println("<h2>" + airline + " Routes</h2>");
+      out.println("<h2>Passengers on Arrival " + Integer.valueOf(arrID) + "</h2>");
     	  out.println("<table>");
 
         out.println(
               "<tr>" +
-                  "<td>acode</td>" + 
-                  "<td>rnum</td>"+
-                  "<td>planemodel</td>"+
+                  "<td>pID</td>" + 
+                  "<td>name</td>"+
+                  "<td>gov_issued_id</td>"+
+                  "<td>dob</td>"+
+                  "<td>pob</td>"+
+                  "<td>depID</td>"+
+                  "<td>arrID</td>"+
               "</tr>");
 
           while (rset.next()) {
         	  out.println(
-        	  "<tr>" +
-               	  "<td>"+rset.getString("acode")+"</td>" + 
-               	  "<td>"+rset.getString("rnum")+"</td>"+
-                  "<td>"+rset.getString("planemodel")+"</td>"+
+              "<tr>" +
+                  "<td>" + rset.getString("pID") + "</td>" + 
+                  "<td>" + rset.getString("name") + "</td>"+
+                  "<td>" + rset.getString("gov_issued_id") + "</td>"+
+                  "<td>" + rset.getString("dob") + "</td>"+
+                  "<td>" + rset.getString("pob") + "</td>"+
+                  "<td>" + rset.getString("depID") + "</td>"+
+                  "<td>" + rset.getString("arrID") + "</td>"+
               "</tr>");
           }
           out.println("</table>");

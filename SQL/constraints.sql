@@ -45,3 +45,8 @@ CREATE OR REPLACE VIEW DeparturesView AS
     )
   )
 WITH CHECK OPTION;
+
+
+
+
+check on gates boolean

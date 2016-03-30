@@ -3,7 +3,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class InsertArrivals extends HttpServlet {
+public class InsertArrival extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -21,7 +21,7 @@ public class InsertArrivals extends HttpServlet {
 
         String statementString = 
         "INSERT INTO Arrivals(arrId, gate, arrT,rnum, acode) " +
-        "VALUES( '" + arrID + "', '" + gate + "',  TO_DATE('" + arrT + "', 'dd/mm/yyyy hh24:mi:ss')," + " '"+ rnum + "', '" + acode + "')";        
+        "VALUES( '" + arrID + "', '" + gate + "',  TO_DATE('" + arrT + "', 'dd/mm/yyyy hh24:mi')," + " '"+ rnum + "', '" + acode + "')";        
 
       //'" + depId + "',
         Connection conn = ConnectionManager.getInstance().getConnection();

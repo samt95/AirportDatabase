@@ -3,24 +3,20 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
-public class InsertOutgoing extends HttpServlet {
+public class InsertGate extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        String acode = request.getParameter("acode");
-        String rnum = request.getParameter("Rnum");
-        String destination = request.getParameter("destination");
-        String leaveTime = request.getParameter("outT");
-        
-
+        String gate= request.getParameter("gate");
 
 
         String statementString = 
-        "INSERT INTO OutgoingRoutes(destination, outT, rnum, acode) " +
-        "VALUES( '" + destination + "', TO_DATE('" + leaveTime + "', 'hh24:mi'), '" + rnum +"', '"+ acode+"')";        
-      
+        "INSERT INTO Gates(gate, isFree) " +
+        "VALUES( '" + gate + "', 1)"; //set gate isFree attribute as true        
+
+      //'" + depId + "',
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
             Statement stmt = conn.createStatement();
