@@ -6,14 +6,14 @@ import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
-public class InsertPassengers extends HttpServlet {
+public class InsertBaggage extends HttpServlet {
     void processRequest(HttpServletRequest request, HttpServletResponse response) 
                             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
         String file = request.getParameter("file");
-
+         
         Connection conn = ConnectionManager.getInstance().getConnection();
         try {
 
@@ -25,20 +25,12 @@ public class InsertPassengers extends HttpServlet {
                 String line             = s.nextLine();
                 String[] result         = line.split(",");
                 
-                String pID              = result[0];
-                String name             = result[1];
-                String gov_issued_id    = result[2];
-                String dob              = result[3];
-                String pob              = result[4];
-                String depID            = result[5];
-                String arrID            = result[6];
+                String bID     = result[0];
+                String weight  = result[1];
+                String pID    = result[2];
 
-                String statementPeople = "INSERT INTO Passengers(pID, name, gov_issued_id, dob, pob ,depID, arrID) " +   
-                                         "VALUES(" + pID + ", '"+ name +"', " + gov_issued_id + ", TO_DATE('" + dob + "', 'dd/mm/yyyy'), '" +
-                                                    pob + "', " + depID + ", " + arrID + ")";
-    
-
-                
+                String statementPeople = "INSERT INTO BAGGAGE VALUES(" + bID + ", " + weight +  ", " + pID + ")";
+            
                 stmt.executeUpdate(statementPeople);
  
                 out.println("Insertion Successful!");
