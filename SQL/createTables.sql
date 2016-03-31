@@ -1,19 +1,9 @@
-drop table baggage;
-drop table passengers;
-drop table departures;
-drop table arrivals;
-drop table incomingroutes;
-drop table outgoingroutes;
-drop table routes;
-drop table airlines;
 
-
--- TABLE CREATION
 
 CREATE TABLE Airlines (
   acode int PRIMARY KEY,
-  name VARCHAR(20),
-  website VARCHAR(20)
+  name VARCHAR(40),
+  website VARCHAR(60)
 );
 
 CREATE TABLE Routes (
@@ -41,9 +31,14 @@ CREATE TABLE IncomingRoutes (
   PRIMARY KEY (rnum, acode)
 );
 
+CREATE TABLE Gates (
+  gate VARCHAR(10) PRIMARY KEY,
+  isFree int
+);
+
 CREATE TABLE Departures (
   depID int PRIMARY KEY,
-  gate VARCHAR(10),
+  gate VARCHAR(10) REFERENCES Gates(gate),
   depT DATE,
   rnum int,
   acode int,
@@ -51,13 +46,14 @@ CREATE TABLE Departures (
 );
 
 CREATE TABLE Arrivals (
-  arrID int PRIMARY KEY ,
-  gate VARCHAR(10),
+  arrID int PRIMARY KEY,
+  gate VARCHAR(10) REFERENCES Gates(gate),
   arrT DATE,
   rnum int,
   acode int,
   FOREIGN KEY (rnum, acode) REFERENCES Routes(rnum, acode)ON DELETE CASCADE
 );
+
 
 CREATE TABLE Passengers (
   pID int PRIMARY KEY,
