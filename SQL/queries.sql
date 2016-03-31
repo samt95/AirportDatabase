@@ -169,7 +169,6 @@ WHERE ((I.incT+(1/24)) <= O.outT AND
 
 b)
 
--- need to test
 SELECT *
 FROM Passengers
 WHERE depID IS NOT NULL AND arrID IS NOT NULL;
@@ -177,10 +176,34 @@ WHERE depID IS NOT NULL AND arrID IS NOT NULL;
 
 ---------------------------------------------------------------------------------------
 c)
--- this does not account for passengers who have both a departure and an arrival
-SELECT name, gov_issued_id, NVL(COUNT(pID), 0)
-FROM Passengers
-GROUP BY gov_issued_id, name;
+
+CREATE VIEW PassengerFlightsCount AS
+  SELECT *
+  FROM (
+  -- count arrival
+  SELECT name, gov_issued_id, NVL(COUNT(pID), 0) AS flightCount
+  FROM Passengers P1
+  WHERE arrID IS NOT NULL
+  GROUP BY gov_issued_id, name
+  )
+  UNION ALL (
+  -- count departures
+  SELECT name, gov_issued_id, NVL(COUNT(pID), 0) AS flightCount
+  FROM Passengers P2
+  WHERE depID IS NOT NULL
+  GROUP BY gov_issued_id, name
+  );
+
+
+
+SELECT * FROM (
+  SELECT name, gov_issued_id, SUM(flightCount) AS flightCount
+  FROM PassengerFlightsCount
+  GROUP BY name, gov_issued_id
+  ORDER BY flightCount DESC
+)
+WHERE rownum <=3;
+
 
 ---------------------------------------------------------------------------------------
 d)
