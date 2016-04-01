@@ -21,8 +21,27 @@ CREATE OR REPLACE VIEW DeparturesView AS
   )
 WITH CHECK OPTION;
 
+--AUSTIN
+CREATE OR REPLACE VIEW DepartureV AS 
+  SELECT depID,depT,gate,acode,rnum   --i.e. all attributes are made available
+  FROM Departures X
+  WHERE NOT EXISTS (
+    --Departure with the same gate and depT within +/- 1 hour of X.depT
 
+    (SELECT *
+    FROM Departures d 
+    where  X.gate = d.gate
+    and (24*abs(X.depT - d.depT)) < 1)
 
+    UNION
+    (SELECT *
+      FROM Arrivals a
+      where a.gate = X.gate
+      and (24*abs(a.arrT - X.depT)) < 1)
+
+    --Arrival with the same gate and arrT within +/- 1 hour of X.depT
+  )
+WITH CHECK OPTION;
 
 
 CREATE OR REPLACE VIEW DeparturesView AS
