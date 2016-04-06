@@ -1,4 +1,4 @@
-CSC 370 - Databases Final Project
+CSC 370 - Database Systems Final Project
 
 Airport Database Manager using HTML forms, Tomcat, and Oracle SQL.
 
