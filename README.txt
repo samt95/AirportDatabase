@@ -11,6 +11,8 @@ Use:
 
 - copy HTML files to apache-tomcat-6.0.18/webapps/ROOT
 
+- edit database credentials in ConnectionManager.java
+
 - compile the servlets (java) into apache-tomcat-6.0.18/webapps/ROOT/WEB-INF/classes
 
 - start tomcat using the startup.sh script in apache-tomcat-6.0.18/bin
